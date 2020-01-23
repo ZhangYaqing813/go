@@ -8,9 +8,10 @@ func main() {
 	for i := 0; i <lenth ; i++{
 		for j :=lenth; j>i; j--{
 			if arrv[j] < arrv[j-1]{
-				tmp := arrv[j]
-				arrv[j] = arrv[j-1]
-				arrv[j-1] = tmp
+				//tmp := arrv[j]
+				//arrv[j] = arrv[j-1]
+				//arrv[j-1] = tmp
+				arrv[j], arrv[j-1] = arrv[j-1], arrv[j]
 			}
 		}
 	}
