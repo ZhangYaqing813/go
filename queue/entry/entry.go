@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"zyq.cn/queue"
+	"go/queue"
 )
 
 func main() {
