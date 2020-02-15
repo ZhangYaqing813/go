@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"zyq.cn/suanfa/untils"
+	"go/suanfa/untils"
 )
 
 func main() {
