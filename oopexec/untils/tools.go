@@ -48,6 +48,14 @@ func (a *account) Query(pwd string) {
 	}
 }
 
+func (a *account) Savemen(pwd string, meny float64) {
+	if pwd == a.pwd {
+		a.balance += meny
+	} else {
+
+	}
+}
+
 func (a *account) Getmeny(pwd string, meny float64) {
 	if pwd == a.pwd {
 		if meny <= a.balance {
