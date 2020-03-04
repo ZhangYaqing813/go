@@ -13,41 +13,45 @@ func main() {
 	var income float64 = 0.00
 	var details string = "收支\t余额\t收支金额\t\t明     细\n"
 	fmt.Println("-------欢迎登录家庭账簿系统------\n")
-	for flag {
+	for {
 		untils.Menus()
 		fmt.Scanln(&choose)
-
 		if choose >= 0 && choose <= 4 {
-
 			switch {
 			case choose == 1:
-				fmt.Printf("%v\n", details)
-				//untils.ShowDa(&details)
+				//fmt.Printf("%v\n", details)
+				untils.ShowDa(&details)
 			case choose == 2:
-				fmt.Println("请输入收入：")
-				fmt.Scanln(&income)
-				fmt.Println("请输入收入来源：")
-				fmt.Scanln(&note)
 				untils.Icoming(&balance, &income, &note, &details)
 			case choose == 3:
-				fmt.Println("请输入收入：")
-				fmt.Scanln(&income)
-				fmt.Println("请输入收入来源：")
-				fmt.Scanln(&note)
 				untils.Favor(&balance, &income, &note, &details)
 			case choose == 4:
 				fmt.Println("显示余额")
 			case choose == 0:
-				flag = false
-			default:
+				for flag == true {
+					fmt.Println("确定要退出本系统吗(Y/N, Y)?")
+					key := ""
+					fmt.Scanln(&key)
+					if key == "Y" || key == "y" {
+						flag = false
+						break
+					} else if key == "N" || key == "n" {
 
+						break
+					} else {
+						fmt.Println("请按提示输入")
+					}
+				}
+
+			default:
+				fmt.Println("请输入正确的选项")
 			}
-			//if flag {
-			//	fmt.Println("即将退出本系统......")
-			//	break
-			//}
-		} else {
-			fmt.Println("请输入正确的选项")
+		}
+		// 退出时进行提示
+		//fmt.Println(flag)
+		if !flag {
+			fmt.Println("退出本系统......")
+			break
 		}
 	}
 }
