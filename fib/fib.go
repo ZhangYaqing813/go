@@ -2,10 +2,10 @@ package main
 
 import "fmt"
 
-func fib (n int) int {
-	if n < 2 {
+func fib(n int) int {
+	if n <= 2 {
 		return n
-	}else{
+	} else {
 
 		tmp := fib(n-2) + fib(n-1)
 		return tmp
@@ -13,20 +13,28 @@ func fib (n int) int {
 
 }
 
-
-func taozi(t int ) int{
+func taozi(t int) int {
 	if t == 10 {
 		return 1
 	} else {
-		return (taozi(t+1)+1) *2
+		return (taozi(t+1) + 1) * 2
 	}
 
 }
 
-func main() {
-	f := fib(5)
-	fmt.Println(f)
+func area(x int) func() int {
+	var h int
+	h = x
+	return func() int {
+		return h * h
+	}
+}
 
+func main() {
+	//	f := fib(6)
+	//fmt.Println(f)
+	f := area(10)
+	fmt.Println(f())
 	//
 	//a,b := 0, 1
 	//
@@ -35,5 +43,5 @@ func main() {
 	//	a, b = b, a+b
 	//}
 
-	fmt.Println(taozi(1))
+	//fmt.Println(taozi(1))
 }
