@@ -61,13 +61,11 @@ func (p *Proj) Get(proj *Proj) {
 	build_dir := path.Join("/data/porj/", proj.Name, "/", proj.Date)
 	_, err := os.Stat(build_dir)
 	if err != nil {
-		fmt.Printf("==== %v", err)
+		fmt.Printf("==== %v\n", err)
 		if os.IsNotExist(err) {
 			fmt.Println("当前文件不存在，准备创建")
 			os.MkdirAll(build_dir, os.ModePerm)
 		}
 	}
-	cmd := exec.Command("cd", build_dir)
 
-	cmd := exec.Command("git clone", proj.Repository)
 }
