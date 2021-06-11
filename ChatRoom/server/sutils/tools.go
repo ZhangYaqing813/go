@@ -7,6 +7,7 @@ import (
 
 func SeProcess(conn net.Conn) {
 	defer conn.Close()
+
 	b := make([]byte, 1024)
 
 	n, err := conn.Read(b)

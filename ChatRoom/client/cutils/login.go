@@ -42,12 +42,14 @@ func Login(userid int, userpwd string) (err error) {
 
 	msgLen := uint32(len(data))
 	var b = make([]byte, 4)
-
 	binary.BigEndian.PutUint32(b[0:4], msgLen)
-
 	n, err := conn.Write(b)
-
 	if n != 4 || err != nil {
+		fmt.Println("发送失败")
+	}
+
+	n, err = conn.Write(data)
+	if err != nil {
 		fmt.Println("发送失败")
 	}
 
