@@ -1,10 +1,10 @@
-package main
+package cutils
 
 import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
-	"go/ChatRoom/utils"
+	"go/ChatRoom/public"
 	"net"
 )
 
@@ -18,9 +18,9 @@ func Login(userid int, userpwd string) (err error) {
 		return
 	}
 
-	var msg utils.Messages
-	msg.Type = utils.LoginMsgType
-	var userloginmsg utils.LoginMsg
+	var msg public.Messages
+	msg.Type = public.LoginMsgType
+	var userloginmsg public.LoginMsg
 	userloginmsg.UserID = userid
 	userloginmsg.UserPwd = userpwd
 

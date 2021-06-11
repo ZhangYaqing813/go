@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"go/tcpsocket/client/utils"
+	"go/ChatRoom/client/cutils"
 )
 
 var userID int
@@ -48,7 +48,7 @@ func main() {
 
 		fmt.Println("请输入用户PWD：")
 		fmt.Scanf("%s\n", &userPwd)
-		err := utils.Login(userID, userPwd)
+		err := cutils.Login(userID, userPwd)
 		if err != nil {
 			fmt.Println(err)
 		}

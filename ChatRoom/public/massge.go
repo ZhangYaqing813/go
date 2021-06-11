@@ -1,4 +1,4 @@
-package utils
+package public
 
 const (
 	LoginMsgType   = "LoginMsg"

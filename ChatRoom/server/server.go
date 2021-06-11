@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"go/ChatRoom/utils"
+	"go/ChatRoom/server/sutils"
 	"net"
 )
 
@@ -29,7 +29,7 @@ func main() {
 			fmt.Println("数据接收错误 err=", err)
 		}
 		fmt.Printf("client inf:%v", conn.RemoteAddr())
-		go utils.SeProcess(conn)
+		go sutils.SeProcess(conn)
 	}
 
 }
