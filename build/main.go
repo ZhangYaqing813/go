@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/ZhangYaqing813/go/build/utils"
+	"time"
 )
 
 var Re_add = map[string]string{
@@ -10,8 +10,6 @@ var Re_add = map[string]string{
 }
 
 func main() {
-	cmesadmin := utils.Fat("cmes-admin", Re_add["cncc-admin"], "target", "1000000")
-	fmt.Println(Re_add["cncc-admin"])
-	fmt.Println(cmesadmin.Repository)
+	fmt.Println(time.Now().Year(), time.Now().Day())
 
 }

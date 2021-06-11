@@ -14,7 +14,7 @@ func main() {
 		return
 	}
 
-	fmt.Printf("conn = %v", conn)
+	fmt.Println("请输入信息:")
 	//从标准输入读取数据
 	reader := bufio.NewReader(os.Stdin)
 	//终止字符
