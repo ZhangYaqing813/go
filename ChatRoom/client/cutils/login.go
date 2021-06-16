@@ -39,6 +39,7 @@ func Login(userid int, userpwd string) (err error) {
 		fmt.Println("json 序列化失败 err= ", err)
 		return
 	}
+	fmt.Printf("data = %v", data)
 
 	msgLen := uint32(len(data))
 	var b = make([]byte, 4)
@@ -49,9 +50,16 @@ func Login(userid int, userpwd string) (err error) {
 	}
 
 	n, err = conn.Write(data)
+
 	if err != nil {
 		fmt.Println("发送失败")
 	}
+
+	//code,err := conn.Read(b)
+	//if err !=nil {
+	//	fmt.Println("登陆状态码失败 err = ",err)
+	//}
+	//fmt.Println("code = ",code)
 
 	return
 }
