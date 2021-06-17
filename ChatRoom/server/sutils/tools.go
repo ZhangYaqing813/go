@@ -14,26 +14,39 @@ func SeProcess(conn net.Conn) {
 	if err != nil {
 		fmt.Println("数据返回错误")
 	}
-	//json 转struct
-	uloginmsg := public.LoginMsg{}
+
 	fmt.Println(msg)
-	json.Unmarshal([]byte(msg.Data), &uloginmsg)
-
-	//登陆判断
-	//var loginCode public.LoginReMsg
-
-	if msg.Type == public.LoginMsgType {
-		fmt.Println("准备校验用户名密码")
-		if uloginmsg.UserID == 100 && uloginmsg.UserPwd == "abc" {
-			fmt.Println("login secuss")
-			//loginCode.Code = 200
-			//err = public.Send(conn, loginCode)
-			//if err !=nil{
-			//	fmt.Println("sending code err = ",err)
-			//	return
-			//}
+	switch msg.Type {
+	case public.LoginMsgType:
+		fmt.Println("用户登陆校验")
+		err = LoginPrec(conn, msg.Data)
+		if err != nil {
+			fmt.Println("回复信息失败")
 		}
-
+	default:
+		fmt.Println("暂时无法处理")
 	}
+}
 
+func LoginPrec(conn net.Conn, msg string) (err error) {
+	var userMsg public.LoginMsg
+	var logmsg public.LoginReMsg
+	var remsg public.Messages
+
+	json.Unmarshal([]byte(msg), &userMsg)
+	remsg.Type = public.LoginReMsgType
+	if userMsg.UserID == 100 && userMsg.UserPwd == "abc" {
+		logmsg.Code = 200
+	} else {
+		logmsg.Code = 500
+		logmsg.Error = "用户名密码错误"
+	}
+	data, err := json.Marshal(logmsg)
+	remsg.Data = string(data)
+
+	err = public.Response(conn, remsg)
+	if err != nil {
+		fmt.Println("消息回复失败")
+	}
+	return
 }

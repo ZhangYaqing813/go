@@ -47,19 +47,33 @@ func Login(userid int, userpwd string) (err error) {
 	n, err := conn.Write(b)
 	if n != 4 || err != nil {
 		fmt.Println("发送失败")
+		return
 	}
 
 	n, err = conn.Write(data)
 
 	if err != nil {
 		fmt.Println("发送失败")
+		return
 	}
+	//time.Sleep(10*time.Second )
 
-	//code,err := conn.Read(b)
-	//if err !=nil {
-	//	fmt.Println("登陆状态码失败 err = ",err)
-	//}
-	//fmt.Println("code = ",code)
-
+	resmsg, err := public.RedMsg(conn)
+	if err != nil {
+		fmt.Println("接受返回状态码错误 err = ", err)
+		return
+	}
+	fmt.Println("********resmg = ", resmsg)
+	var logcod public.LoginReMsg
+	err = json.Unmarshal([]byte(resmsg.Data), &logcod)
+	if resmsg.Type == public.LoginReMsgType {
+		if err != nil {
+			fmt.Println("解析返回状态码失败 err = ", err)
+		}
+		if logcod.Code == 200 {
+			fmt.Println("服务验证登陆成功")
+		}
+	}
+	//time.Sleep(10*time.Second )
 	return
 }
