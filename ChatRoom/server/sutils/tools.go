@@ -35,12 +35,15 @@ func LoginPrec(conn net.Conn, msg string) (err error) {
 
 	json.Unmarshal([]byte(msg), &userMsg)
 	remsg.Type = public.LoginReMsgType
-	if userMsg.UserID == 100 && userMsg.UserPwd == "abc" {
-		logmsg.Code = 200
-	} else {
-		logmsg.Code = 500
-		logmsg.Error = "用户名密码错误"
-	}
+	code := public.RedisGet(userMsg.UserID, userMsg.UserPwd)
+	//if userMsg.UserID == 100 && userMsg.UserPwd == "abc" {
+	//	logmsg.Code = 200
+	//} else {
+	//	logmsg.Code = 500
+	//	logmsg.Error = "用户名密码错误"
+	//}
+	logmsg.Code = code
+
 	data, err := json.Marshal(logmsg)
 	remsg.Data = string(data)
 
