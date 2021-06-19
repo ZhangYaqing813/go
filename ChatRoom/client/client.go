@@ -9,21 +9,22 @@ var userID int
 var userPwd string
 
 func main() {
+	//循环控制条件
 	var loop = true
+	// 选项就收
 	var key int
-
+	//菜单的循环
 	for loop {
 		fmt.Println("\t=======欢迎进入聊天室=======")
 		fmt.Println("\t\t\t1、新用户注册")
 		fmt.Println("\t\t\t2、用户登录")
 		fmt.Println("\t\t\t3、退出系统")
-		fmt.Println("\t------------------------")
+		fmt.Println("\t--------------------------")
 
 		fmt.Println("请输入选择：")
-		fmt.Scanf("%d\n", &key)
-		//tmp := bufio.NewReader(os.Stdin)
-		//key ,_ = tmp.ReadString('\n')
 
+		fmt.Scanf("%d\n", &key)
+		//根据不同的选择进入不同的子菜单
 		switch key {
 		case 1:
 			fmt.Println("新用户注册")
@@ -38,7 +39,7 @@ func main() {
 			fmt.Println("输入有误，请重新输入")
 		}
 	}
-
+	// 子菜单
 	if key == 1 {
 		fmt.Println("新用户注册")
 		fmt.Println("请输入用户ID：")

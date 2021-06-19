@@ -13,16 +13,19 @@ func main() {
 		3、开启协程处理conn, SeProcess()
 
 	*/
-
+	//监听0.0.0.0 的端口 10086
 	Listen, err := net.Listen("tcp", "0.0.0.0:10086")
-	fmt.Println("打开监听")
 	if err != nil {
 		fmt.Println("监听错误 err= ", err)
 		return
 	}
-	defer Listen.Close()
+	defer func() {
+		err = Listen.Close()
+		if err != nil {
+			fmt.Println("服务监听关闭失败")
+		}
+	}()
 	//开始接受数据
-	fmt.Println("准备接受数据")
 	for {
 		conn, err := Listen.Accept()
 		if err != nil {

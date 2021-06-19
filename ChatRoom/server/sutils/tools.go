@@ -8,6 +8,11 @@ import (
 )
 
 func SeProcess(conn net.Conn) {
+	/*
+		1、会话处理函数
+		1.1 根据不同的message 中的message.Tpye 类型进行不同的业务处理
+	*/
+	// 延时关闭会话
 	defer func(conn net.Conn) {
 		err := conn.Close()
 		if err != nil {
@@ -15,20 +20,23 @@ func SeProcess(conn net.Conn) {
 		}
 	}(conn)
 	fmt.Println("开始接收数据")
-	fmt.Printf("public.RedMsg", public.RedMsg)
-	msg, err := public.RedMsg(conn)
+	// 调用ReMsg 函数获取client 发送的信息
+
+	var msg, err = public.RedMsg(conn)
 	if err != nil {
 		fmt.Println("数据返回错误")
 	}
 
-	fmt.Println(msg)
+	// 根据 MSG.Type 进行不同的业务处理
 	switch msg.Type {
+	// 处理用户登录的信息
 	case public.LoginMsgType:
 		fmt.Println("用户登陆校验")
 		err = LoginPrec(conn, msg.Data)
 		if err != nil {
 			fmt.Println("回复信息失败")
 		}
+	// 处理用户注册的业务请求
 	case public.RegMsgType:
 		fmt.Println("新用户注册=========")
 		err = RegPrec(conn, msg.Data)
@@ -39,19 +47,29 @@ func SeProcess(conn net.Conn) {
 }
 
 func LoginPrec(conn net.Conn, msg string) (err error) {
+	// userMsg 接受client 发送过来的用户信息
 	var userMsg public.LoginMsg
+
+	// logmsg 用于接受用户登录结果的信息
 	var logmsg public.LoginReMsg
+
+	// remsg 回复client 信息
 	var remsg public.Messages
-
+	//解析json ,付给userMsg,获取userID和userPwd
 	json.Unmarshal([]byte(msg), &userMsg)
+
+	//设置 message 类型为client 登录类型的回复消息
 	remsg.Type = "LoginReMsgType"
-	code := public.RedisGet(userMsg.UserID, userMsg.UserPwd)
-
-	logmsg.Code = code
-
+	//调用ReisGet 函数，判断client 发送的UserID与userPwd 匹配,拿到返回值code，组装进回复的消息体内
+	logmsg.Code = public.RedisGet(userMsg.UserID, userMsg.UserPwd)
+	//序列话消息体
 	data, err := json.Marshal(logmsg)
+	if err != nil {
+		fmt.Println("回复client 的loninResMsg 消息体序列化错误 err = ", err)
+	}
+	// loninResMsg 组装到回复的消息体
 	remsg.Data = string(data)
-
+	//调用 senMsg 函数进行信息回复
 	err = public.SendMsg(conn, remsg)
 	if err != nil {
 		fmt.Println("消息回复失败")
@@ -59,33 +77,46 @@ func LoginPrec(conn net.Conn, msg string) (err error) {
 	return
 }
 
-func RegPrec(conn net.Conn, msg string) (err error) {
-	var userRegMsg public.RegMsg
-	var umsg public.Messages
-	var userRRmsg public.LoginReMsg
+// 用户注册消息的处理函数
 
+func RegPrec(conn net.Conn, msg string) (err error) {
+	// client 发送的注册信息
+	var userRegMsg public.RegMsg
+	// 回复client 的注册结果的总信息
+	var umsg public.Messages
+	// umsg 的有效载荷（存放注册结果的信息），
+	var userRRmsg public.LoginReMsg
+	//设置umsg 的消息类型为回复注册消息的结果类型
+	umsg.Type = "RegMsgResType"
+	// 解析client 发送的msg 信息，
 	err = json.Unmarshal([]byte(msg), &userRegMsg)
 	if err != nil {
 		return err
 	}
 
-	umsg.Type = "RegMsgResType"
+	// 用户信息存入redis 中
 	code := public.RedisPush(userRegMsg.UserID, userRegMsg.UserPwd)
+	//判断是否成功写入redis
+	// 200 表示成功
+	//600 表示此UID已经被注册
 	if code != 200 && code == 600 {
 		userRRmsg.Code = code
 		userRRmsg.Error = "UID 已注册"
 	} else {
 		userRRmsg.Code = code
-
 	}
 
 	data, err := json.Marshal(userRRmsg)
-	umsg.Data = string(data)
+	if err != nil {
+		fmt.Println("注册回复信息序列化失败err = ", err)
+	}
 
+	// 组装到umsg 中
+	umsg.Data = string(data)
+	// 发送注册结果到client
 	err = public.SendMsg(conn, umsg)
 	if err != nil {
 		fmt.Println("消息回复失败,err", err)
 	}
-
 	return
 }
