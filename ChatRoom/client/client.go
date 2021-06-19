@@ -41,6 +41,15 @@ func main() {
 
 	if key == 1 {
 		fmt.Println("新用户注册")
+		fmt.Println("请输入用户ID：")
+		fmt.Scanf("%d\n", &userID)
+
+		fmt.Println("请输入用户PWD：")
+		fmt.Scanf("%s\n", &userPwd)
+		err := cutils.Register(userID, userPwd)
+		if err != nil {
+			fmt.Println("用户注册失败err = ", err)
+		}
 	} else if key == 2 {
 		fmt.Println("用户登录")
 		fmt.Println("请输入用户ID：")

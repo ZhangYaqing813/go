@@ -51,22 +51,23 @@ func Login(userid int, userpwd string) (err error) {
 	}
 
 	n, err = conn.Write(data)
-
 	if err != nil {
 		fmt.Println("发送失败")
 		return
 	}
+
 	//time.Sleep(10*time.Second )
+	fmt.Printf("public.RedMsg", public.RedMsg)
 
 	resmsg, err := public.RedMsg(conn)
 	if err != nil {
-		fmt.Println("接受返回状态码错误 err = ", err)
+		fmt.Println("\n接受返回状态码错误 err = ", err)
 		return
 	}
 	fmt.Println("********resmg = ", resmsg)
 	var logcod public.LoginReMsg
 	err = json.Unmarshal([]byte(resmsg.Data), &logcod)
-	if resmsg.Type == public.LoginReMsgType {
+	if resmsg.Type == "LoginReMsgType" {
 		if err != nil {
 			fmt.Println("解析返回状态码失败 err = ", err)
 		}

@@ -2,7 +2,7 @@ package public
 
 import (
 	"fmt"
-	"src/github.com/gomodule/redigo/redis"
+	"github.com/gomodule/redigo/redis"
 )
 
 func redisCon() (pool *redis.Pool) {
@@ -22,14 +22,20 @@ func redisCon() (pool *redis.Pool) {
 func RedisPush(userID int, userPwd string) (code int) {
 	conn := redisCon().Get()
 	defer conn.Close()
-	_, err := conn.Do("set", userID, userPwd)
-	if err != nil {
-		fmt.Println("写入redis err= ", err)
-		code = 500
+	//判断下userID 是否已经存在，如果存在，则返回一个状态码或错误信息
+	res, _ := redis.String(conn.Do("keys", userID))
+	if len(res) == 0 { //如果redis 存在UID则长度不为零，
+		_, err := conn.Do("set", userID, userPwd)
+		if err != nil {
+			fmt.Println("写入redis err= ", err)
+			code = 500
+		} else {
+			code = 200
+		}
 	} else {
-		code = 200
+		fmt.Println("UID已被占用")
+		code = 600
 	}
-
 	return code
 }
 
