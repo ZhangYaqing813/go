@@ -26,13 +26,19 @@ func main() {
 		}
 	}()
 	//开始接受数据
+
 	for {
+
 		conn, err := Listen.Accept()
+
 		if err != nil {
 			fmt.Println("数据接收错误 err=", err)
 		}
+		se := &sutils.Session{
+			Conn: conn,
+		}
 		fmt.Printf("client inf:%v", conn.RemoteAddr())
-		go sutils.SeProcess(conn)
+		go se.SeProcess()
 	}
 
 }
