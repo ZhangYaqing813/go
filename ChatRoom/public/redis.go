@@ -2,7 +2,7 @@ package public
 
 import (
 	"fmt"
-	"src/github.com/gomodule/redigo/redis"
+	"github.com/gomodule/redigo/redis"
 )
 
 // 创建redis 链接，并返回连接池地址

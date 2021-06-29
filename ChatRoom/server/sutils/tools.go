@@ -43,7 +43,7 @@ func (S *Session) SeProcess() {
 	}
 
 	// 初始化一个 UserPrc 实例
-	up := userPrc{
+	up := &userPrc{
 		conn: S.Conn,
 		msg:  msg.Data,
 	}

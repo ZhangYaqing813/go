@@ -30,16 +30,18 @@ func (T *Transfer) RedMsg() (msg Messages, err error) {
 	fmt.Println("debug 11111111111")
 	// 读取客户端发送的数据（真实数据）
 	//buf := make([]byte, 1024)
-	_, err = T.Conn.Read(T.Buf[:4])
+	_, err = T.Conn.Read(T.Buf[:msgLen])
 	if err != nil {
 		fmt.Println("conn.Read err = ", err)
 	}
 	fmt.Println("debug 22222222222")
-
+	fmt.Println("buff = ", T.Buf[:msgLen])
 	err = json.Unmarshal(T.Buf[:msgLen], &msg)
+	fmt.Println("debug msg= ", msg)
 	if err != nil {
 		fmt.Println("json.Unmarshal err = ", err)
 	}
+
 	fmt.Println("debug 3333333")
 	return msg, err
 
